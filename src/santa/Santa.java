@@ -7,6 +7,7 @@ import children.Kid;
 import children.Teen;
 import common.Constants;
 import enums.Cities;
+import enums.CityStrategyEnum;
 import gifts.Gift;
 
 import java.util.ArrayList;
@@ -21,6 +22,23 @@ public final class Santa implements Visitor {
     private ArrayList<Gift> gifts = new ArrayList<>();
     private ArrayList<Cities> cities = new ArrayList<>();
     private ArrayList<AnnualChanges> annualChanges = new ArrayList<>();
+    private CityStrategyEnum cityStrategy;
+
+    /**
+     * Get the strategy of the current year
+     * @return CityStrategyEnum - strategy
+     */
+    public CityStrategyEnum getCityStrategy() {
+        return cityStrategy;
+    }
+
+    /**
+     * Set the strategy of the current year
+     * @param cityStrategy CityStrategyEnum - strategy
+     */
+    public void setCityStrategy(CityStrategyEnum cityStrategy) {
+        this.cityStrategy = cityStrategy;
+    }
 
     /**
      * Get the Santa's list of gifts

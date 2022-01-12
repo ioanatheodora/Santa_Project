@@ -1,5 +1,8 @@
 package fileio;
 
+import enums.CityStrategyEnum;
+import enums.EnumConverter;
+
 import java.util.ArrayList;
 
 public class AnnualChangesInputData {
@@ -7,15 +10,18 @@ public class AnnualChangesInputData {
     private ArrayList<SantaGiftsInputData> newGifts;
     private ArrayList<ChildrenInputData> newChildren;
     private ArrayList<ChildrenUpdatesInputData> childrenUpdates;
+    private final CityStrategyEnum cityStrategy;
 
     public AnnualChangesInputData(final Double santaBudget,
                                   final ArrayList<SantaGiftsInputData> newGifts,
                                   final ArrayList<ChildrenInputData> newChildren,
-                                  final ArrayList<ChildrenUpdatesInputData> childrenUpdates) {
+                                  final ArrayList<ChildrenUpdatesInputData> childrenUpdates,
+                                  final String cityStrategy) {
         this.santaBudget = santaBudget;
         this.newGifts = newGifts;
         this.newChildren = newChildren;
         this.childrenUpdates = childrenUpdates;
+        this.cityStrategy = new EnumConverter(cityStrategy).toCityStrategyEnum();
     }
 
     /**
@@ -80,5 +86,13 @@ public class AnnualChangesInputData {
      */
     public void setChildrenUpdates(final ArrayList<ChildrenUpdatesInputData> childrenUpdates) {
         this.childrenUpdates = childrenUpdates;
+    }
+
+    /**
+     * Get the strategy of the current year
+     * @return CityStrategyEnum - strategy
+     */
+    public CityStrategyEnum getCityStrategy() {
+        return cityStrategy;
     }
 }

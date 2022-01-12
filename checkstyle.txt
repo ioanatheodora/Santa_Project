@@ -1,0 +1,5 @@
+Starting audit...
+[ERROR] D:\ACS\sem1an2\POO\PROJECT2\Santa_Project\.\src\children\Child.java:26:47: Parameter elfType should be final. [FinalParameters]
+[ERROR] D:\ACS\sem1an2\POO\PROJECT2\Santa_Project\.\src\santa\Santa.java:39:33: Parameter cityStrategy should be final. [FinalParameters]
+Audit done.
+Checkstyle ends with 2 errors.

@@ -1,6 +1,7 @@
 package annualchanges;
 
 import children.Child;
+import enums.CityStrategyEnum;
 import gifts.Gift;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class AnnualChanges {
     private final ArrayList<Gift> newGifts;
     private final ArrayList<Child> newChildren;
     private final ArrayList<ChildUpdate> childrenUpdates;
+    private final CityStrategyEnum cityStrategy;
 
     /**
      * Get the new budget of the year
@@ -43,12 +45,22 @@ public class AnnualChanges {
         return childrenUpdates;
     }
 
+    /**
+     * Get the strategy of the current year
+     * @return CityStrategyEnum - the strategy
+     */
+    public CityStrategyEnum getCityStrategy() {
+        return cityStrategy;
+    }
+
     public AnnualChanges(final double budget, final ArrayList<Gift> newGifts,
                          final ArrayList<Child> newChildren,
-                         final ArrayList<ChildUpdate> childrenUpdates) {
+                         final ArrayList<ChildUpdate> childrenUpdates,
+                         final CityStrategyEnum cityStrategy) {
         this.budget = budget;
         this.newGifts = newGifts;
         this.newChildren = newChildren;
         this.childrenUpdates = childrenUpdates;
+        this.cityStrategy = cityStrategy;
     }
 }

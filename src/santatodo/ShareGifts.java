@@ -1,6 +1,7 @@
 package santatodo;
 
 import children.Child;
+import enums.Category;
 import fileio.Output;
 import fileio.OutputAnnualChildren;
 import fileio.Writer;
@@ -26,13 +27,13 @@ public class ShareGifts {
      * @return returns an instance of the class Gift if there is a gift
      * found, or null otherwise
      */
-    private Gift getCategoryGift(final String category, final double budget) {
+    private Gift getCategoryGift(final Category category, final double budget) {
         Gift givenGift = null;
         Gift smallest = null;
         Double smallestPrice = Double.MAX_VALUE;
 
         for (Gift gift : santa.getGifts()) {
-            if (gift.getCategory().equals(category) && gift.getPrice() < budget
+            if (gift.getCategory() == category && gift.getPrice() < budget
                 && smallestPrice > gift.getPrice()) {
                 smallest = gift;
                 smallestPrice = gift.getPrice();
@@ -70,7 +71,8 @@ public class ShareGifts {
             Double childBudget = budgetUnit * child.getValue().getAverageScore();
             Double temporaryBudget = childBudget;
 
-            for (String category : santa.getChildren().get(child.getKey()).getGiftsPreferences()) {
+            for (Category category : santa.getChildren().get(child.getKey()).
+                    getGiftsPreferences()) {
                 // check whether the category from the child's list is part of Santa's List
                 Gift receivedGift = getCategoryGift(category, temporaryBudget);
 
@@ -82,7 +84,7 @@ public class ShareGifts {
             }
             Child addResult = santa.getChildren().get(child.getKey());
             Output output = new Output(addResult.getId(), addResult.getLastName(),
-                    addResult.getFirstName(), addResult.getCity(),
+                    addResult.getFirstName(), addResult.getCity().getValue(),
                     addResult.getAge(), addResult.getGiftsPreferences(),
                     child.getValue().getAverageScore(),
                     addResult.getNiceScore(), childBudget, childGifts);

@@ -1,15 +1,20 @@
 package fileio;
 
+import enums.Category;
+import enums.EnumConverter;
+
 public class SantaGiftsInputData {
-    private String productName;
-    private Double price;
-    private String category;
+    private final String productName;
+    private final Double price;
+    private final Category category;
+    private final int quantity;
 
     public SantaGiftsInputData(final String productName, final Double price,
-                               final String category) {
+                               final String category, final int quantity) {
         this.productName = productName;
         this.price = price;
-        this.category = category;
+        this.category = new EnumConverter(category).toCategory();
+        this.quantity = quantity;
     }
 
     /**
@@ -21,14 +26,6 @@ public class SantaGiftsInputData {
     }
 
     /**
-     * Set the name of the gift
-     * @param productName String - product name
-     */
-    public void setProductName(final String productName) {
-        this.productName = productName;
-    }
-
-    /**
      * Get the price of the gift
      * @return double - price
      */
@@ -37,26 +34,19 @@ public class SantaGiftsInputData {
     }
 
     /**
-     * Set the price of the gift
-     * @param price double - price
-     */
-    public void setPrice(final Double price) {
-        this.price = price;
-    }
-
-    /**
      * Get the category of a gift
      * @return String - category
      */
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
     /**
-     * Set the category of a gift
-     * @param category String - category
+     * Get the quantity of the specific gift
+     * @return int - quantity
      */
-    public void setCategory(final String category) {
-        this.category = category;
+    public int getQuantity() {
+        return quantity;
     }
+
 }

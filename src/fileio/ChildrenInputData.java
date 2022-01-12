@@ -1,25 +1,35 @@
 package fileio;
 
+import enums.Category;
+import enums.Cities;
+import enums.ElvesType;
+import enums.EnumConverter;
+
 import java.util.ArrayList;
 
 public class ChildrenInputData {
-    private int id;
-    private String lastName;
-    private String firstName;
-    private int age;
-    private String city;
-    private Double niceScore;
-    private ArrayList<String> giftsPreferences;
+    private final int id;
+    private final String lastName;
+    private final String firstName;
+    private final int age;
+    private final Cities city;
+    private final Double niceScore;
+    private final ArrayList<Category> giftsPreferences;
+    private final Double niceScoreBonus;
+    private final ElvesType elfType;
 
     public ChildrenInputData(final int id, final String lastName, final String firstName,
                              final int age, final String city, final Double niceScore,
-                             final ArrayList<String> giftsPreferences) {
+                             final Double niceScoreBonus, final String elfType,
+                             final ArrayList<Category> giftsPreferences) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.age = age;
-        this.city = city;
+        this.city = new EnumConverter(city).toCities();
         this.niceScore = niceScore;
+        this.niceScoreBonus = niceScoreBonus;
+        this.elfType = new EnumConverter(elfType).toElvesType();
         this.giftsPreferences = giftsPreferences;
     }
 
@@ -32,27 +42,11 @@ public class ChildrenInputData {
     }
 
     /**
-     * Sets the child's id
-     * @param id int - the child's id
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    /**
      * Get the child's last name
      * @return a String - last name
      */
     public String getLastName() {
         return lastName;
-    }
-
-    /**
-     * Set the child's last name
-     * @param lastName a String - last name
-     */
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
     }
 
     /**
@@ -64,14 +58,6 @@ public class ChildrenInputData {
     }
 
     /**
-     * Set the child's first name
-     * @param firstName a String - first name
-     */
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    /**
      * Get the child's age
      * @return int - age
      */
@@ -80,27 +66,11 @@ public class ChildrenInputData {
     }
 
     /**
-     * Set the child's age
-     * @param age int - age
-     */
-    public void setAge(final int age) {
-        this.age = age;
-    }
-
-    /**
      * Get the city the child is from
      * @return String - city
      */
-    public String getCity() {
+    public Cities getCity() {
         return city;
-    }
-
-    /**
-     * Set the city the child is from
-     * @param city String - city
-     */
-    public void setCity(final String city) {
-        this.city = city;
     }
 
     /**
@@ -112,26 +82,26 @@ public class ChildrenInputData {
     }
 
     /**
-     * Set the child's nice score
-     * @param niceScore double - nice score
-     */
-    public void setNiceScore(final Double niceScore) {
-        this.niceScore = niceScore;
-    }
-
-    /**
      * Get the list of gifts the child prefers
      * @return ArrayList - list of gifts
      */
-    public ArrayList<String> getGiftsPreferences() {
+    public ArrayList<Category> getGiftsPreferences() {
         return giftsPreferences;
     }
 
     /**
-     * Set the list of gifts the child prefers
-     * @param giftsPreferences - list of gifts
+     * Get the child's nice score bonus
+     * @return Double - nice score bonus
      */
-    public void setGiftsPreferences(final ArrayList<String> giftsPreferences) {
-        this.giftsPreferences = giftsPreferences;
+    public Double getNiceScoreBonus() {
+        return niceScoreBonus;
+    }
+
+    /**
+     * Get the assigned elf type
+     * @return ELvesType - the elf type
+     */
+    public ElvesType getElfType() {
+        return elfType;
     }
 }

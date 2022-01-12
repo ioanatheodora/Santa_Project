@@ -1,21 +1,35 @@
 package gifts;
 
 
+import enums.Category;
+
 public class Gift {
     private final String productName;
     private final Double price;
-    private final String category;
+    private final Category category;
+    private final int quantity;
 
     public Gift(final Gift gift) {
         productName = gift.getProductName();
         price = gift.getPrice();
         category = gift.getCategory();
+        quantity = gift.getQuantity();
     }
 
-    public Gift(final String productName, final Double price, final String category) {
+    public Gift(final String productName, final Double price, final Category category,
+                final int quantity) {
         this.productName = productName;
         this.price = price;
         this.category = category;
+        this.quantity = quantity;
+    }
+
+    /**
+     * Get the quantity of the gift
+     * @return int - quantity
+     */
+    public int getQuantity() {
+        return quantity;
     }
 
     /**
@@ -38,7 +52,7 @@ public class Gift {
      * Get the category of the gift
      * @return String - category of the gift
      */
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 }

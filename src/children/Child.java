@@ -1,29 +1,38 @@
 package children;
 
+import enums.Category;
+import enums.Cities;
+import enums.ElvesType;
 import gifts.Gift;
 
 import java.util.ArrayList;
 
 public abstract class Child implements Visitable {
-    private int id;
-    private String lastName;
-    private String firstName;
+    private final int id;
+    private final String lastName;
+    private final String firstName;
     private int age;
-    private String city;
+    private Cities city;
     private Double averageScore;
     private ArrayList<Double> niceScore;
-    private ArrayList<String> giftsPreferences;
+    private final Double niceScoreBonus;
+    private ArrayList<Category> giftsPreferences;
     private ArrayList<Gift> receivedGifts = new ArrayList<>();
+    private ElvesType elfType;
+
 
     public Child(final int id, final String lastName, final String firstName, final int age,
-                 final String city, final ArrayList<Double> niceScore,
-                 final ArrayList<String> giftsPreferences) {
+                 final Cities city, final ArrayList<Double> niceScore,
+                 final Double niceScoreBonus, ElvesType elfType,
+                 final ArrayList<Category> giftsPreferences) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.age = age;
         this.city = city;
         this.niceScore = niceScore;
+        this.niceScoreBonus = niceScoreBonus;
+        this.elfType = elfType;
         this.giftsPreferences = giftsPreferences;
     }
 
@@ -34,6 +43,7 @@ public abstract class Child implements Visitable {
         this.age = child.getAge();
         this.city = child.getCity();
         this.niceScore = child.getNiceScore();
+        this.niceScoreBonus = child.getNiceScoreBonus();
         this.giftsPreferences = child.getGiftsPreferences();
     }
 
@@ -46,27 +56,11 @@ public abstract class Child implements Visitable {
     }
 
     /**
-     * Sets the child's id
-     * @param id int - the child's id
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    /**
      * Get the child's last name
      * @return a String - last name
      */
     public String getLastName() {
         return lastName;
-    }
-
-    /**
-     * Set the child's last name
-     * @param lastName a String - last name
-     */
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
     }
 
     /**
@@ -77,13 +71,6 @@ public abstract class Child implements Visitable {
         return firstName;
     }
 
-    /**
-     * Set the child's first name
-     * @param firstName a String - first name
-     */
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
 
     /**
      * Get the child's age
@@ -105,7 +92,7 @@ public abstract class Child implements Visitable {
      * Get the city the child is from
      * @return String - city
      */
-    public String getCity() {
+    public Cities getCity() {
         return city;
     }
 
@@ -113,7 +100,7 @@ public abstract class Child implements Visitable {
      * Set the city the child is from
      * @param city String - city
      */
-    public void setCity(final String city) {
+    public void setCity(final Cities city) {
         this.city = city;
     }
 
@@ -133,6 +120,13 @@ public abstract class Child implements Visitable {
         this.niceScore = niceScore;
     }
 
+    /**
+     * Get the child's nice score bonus
+     * @return Double - nice score bonus
+     */
+    public Double getNiceScoreBonus() {
+        return niceScoreBonus;
+    }
 
     /**
      * Get the list of gifts the child receives
@@ -154,7 +148,7 @@ public abstract class Child implements Visitable {
      * Get the child's list of gift preferences
      * @return ArrayList - list of gift preferences
      */
-    public ArrayList<String> getGiftsPreferences() {
+    public ArrayList<Category> getGiftsPreferences() {
         return giftsPreferences;
     }
 
@@ -162,7 +156,7 @@ public abstract class Child implements Visitable {
      * Set the child's list of gift preferences
      * @param giftsPreferences ArrayList - list of gift preferences
      */
-    public void setGiftsPreferences(final ArrayList<String> giftsPreferences) {
+    public void setGiftsPreferences(final ArrayList<Category> giftsPreferences) {
         this.giftsPreferences = giftsPreferences;
     }
 
@@ -180,5 +174,21 @@ public abstract class Child implements Visitable {
      */
     public void setAverageScore(final Double averageScore) {
         this.averageScore = averageScore;
+    }
+
+    /**
+     * Get the elf type of the current year
+     * @return ElvesType - elf type
+     */
+    public ElvesType getElfType() {
+        return elfType;
+    }
+
+    /**
+     * Set the elf type of the current year
+     * @param elfType ElvesType - elf type
+     */
+    public void setElfType(final ElvesType elfType) {
+        this.elfType = elfType;
     }
 }

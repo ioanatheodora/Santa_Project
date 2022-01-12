@@ -1,6 +1,8 @@
 package fileio;
 
 import common.Constants;
+import enums.Category;
+import enums.EnumConverter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +21,17 @@ public class InputLoader {
 
     public InputLoader(final String inputPath) {
         this.inputPath = inputPath;
+    }
+
+    private static ArrayList<Category> getPreferences(final ArrayList<String> gifts) {
+        ArrayList<Category> giftPreferences = new ArrayList<>();
+
+        for (String gift : gifts) {
+            Category category = new EnumConverter(gift).toCategory();
+            giftPreferences.add(category);
+        }
+
+        return giftPreferences;
     }
 
     /**
@@ -45,6 +58,8 @@ public class InputLoader {
      */
     public static void convertJSONToChildren(final JSONObject jsonChild,
                                              final List<ChildrenInputData> children) {
+        ArrayList<Category> giftsPreferences = getPreferences(convertJSONArray((JSONArray) jsonChild
+                        .get(Constants.GIFTS_PREFERENCES)));
         children.add(new ChildrenInputData(
                 ((Long) jsonChild.get(Constants.ID)).intValue(),
                 (String) jsonChild.get(Constants.LAST_NAME),
@@ -52,9 +67,9 @@ public class InputLoader {
                 ((Long) jsonChild.get(Constants.AGE)).intValue(),
                 (String) jsonChild.get(Constants.CITY),
                 ((Long) jsonChild.get(Constants.NICE_SCORE)).doubleValue(),
-                convertJSONArray((JSONArray) jsonChild
-                        .get(Constants.GIFTS_PREFERENCES))
-        ));
+                ((Long) jsonChild.get(Constants.NICE_SCORE_BONUS)).doubleValue(),
+                (String) jsonChild.get(Constants.ELF),
+                giftsPreferences));
 
     }
 
@@ -68,7 +83,8 @@ public class InputLoader {
         santaGifts.add(new SantaGiftsInputData(
                 (String) jsonGift.get(Constants.PRODUCT_NAME),
                 ((Long) jsonGift.get(Constants.PRICE)).doubleValue(),
-                (String) jsonGift.get(Constants.CATEGORY)
+                (String) jsonGift.get(Constants.CATEGORY),
+                ((Long) jsonGift.get(Constants.QUANTITY)).intValue()
         ));
     }
 
@@ -79,20 +95,19 @@ public class InputLoader {
      */
     public static void convertJSONToChildrenUpdates(final JSONObject jsonUpdate,
                                                     final List<ChildrenUpdatesInputData> updates) {
+        ArrayList<Category> giftsPreferences = getPreferences(convertJSONArray((JSONArray)
+                jsonUpdate.get(Constants.GIFTS_PREFERENCES)));
         if ((Long) jsonUpdate.get(Constants.NICE_SCORE) != null) {
 //            we get new information about the nice score
             updates.add(new ChildrenUpdatesInputData(
                     ((Long) jsonUpdate.get(Constants.ID)).intValue(),
                     ((Long) jsonUpdate.get(Constants.NICE_SCORE)).doubleValue(),
-                    convertJSONArray((JSONArray) jsonUpdate
-                            .get(Constants.GIFTS_PREFERENCES))
-            ));
+                    giftsPreferences, (String) jsonUpdate.get(Constants.ELF))
+                    );
         } else {
             updates.add(new ChildrenUpdatesInputData(
                     ((Long) jsonUpdate.get(Constants.ID)).intValue(),
-                    convertJSONArray((JSONArray) jsonUpdate
-                            .get(Constants.GIFTS_PREFERENCES))
-            ));
+                    giftsPreferences, (String) jsonUpdate.get(Constants.ELF)));
         }
     }
 
@@ -104,6 +119,7 @@ public class InputLoader {
     public static void convertJSONToAnnualChanges(final JSONObject jsonChange,
                                              final List<AnnualChangesInputData> annualChanges) {
         double newSantaBudget = ((Long) jsonChange.get(Constants.NEW_SANTA_BUDGET)).doubleValue();
+        String strategy = (String) jsonChange.get(Constants.STRATEGY);
         JSONArray jsonChildren = (JSONArray)
                 jsonChange.get(Constants.NEW_CHILDREN);
         JSONArray jsonSantaGifts = (JSONArray)
@@ -132,7 +148,8 @@ public class InputLoader {
         }
 
         AnnualChangesInputData annualChange = new AnnualChangesInputData(
-                newSantaBudget, newSantaGifts, newChildren, childrenUpdates);
+                newSantaBudget, newSantaGifts, newChildren, childrenUpdates,
+                strategy);
         annualChanges.add(annualChange);
     }
 

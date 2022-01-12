@@ -7,6 +7,7 @@ import children.Kid;
 import children.Teen;
 import annualchanges.ChildUpdate;
 import common.Constants;
+import enums.Category;
 import gifts.Gift;
 import santa.Santa;
 
@@ -49,7 +50,7 @@ public class Update {
      * @param gift - the new category the child prefers
      * @param child - the child
      */
-    public void addGift(final String gift, final Child child) {
+    public void addGift(final Category gift, final Child child) {
         // verify firstly whether the category already exists and delete it if so
         for (int i = 0; i < child.getGiftsPreferences().size(); i++) {
             if (gift.equals(child.getGiftsPreferences().get(i))) {
@@ -101,6 +102,9 @@ public class Update {
         for (ChildUpdate childUpdate : annualChange.getChildrenUpdates()) {
 
             if (santa.getChildren().containsKey(childUpdate.getId())) {
+                // updated the elf type of the current year
+                santa.getChildren().get(childUpdate.getId()).
+                        setElfType(childUpdate.getElf());
                 // add niceScore to the list of niceScores if any information given
                 if (childUpdate.getNiceScore() >= 0d) {
                     santa.getChildren().get(childUpdate.getId()).getNiceScore().
@@ -112,7 +116,7 @@ public class Update {
                     for (int j = childUpdate.getGiftsPreferences().size() - 1; j >= 0; j--) {
                         // the gift preferences are taken in the reversed order to be added
                         // correctly in the list of gift preferences
-                        String gift = childUpdate.getGiftsPreferences().get(j);
+                        Category gift = childUpdate.getGiftsPreferences().get(j);
                         if (santa.getChildren().containsKey(childUpdate.getId())) {
                             addGift(gift, santa.getChildren().get(childUpdate.getId()));
                         }
@@ -128,5 +132,6 @@ public class Update {
 
         // update the budget
         santa.setBudget(annualChange.getBudget());
+        santa.setCityStrategy(annualChange.getCityStrategy());
     }
 }

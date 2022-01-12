@@ -1,24 +1,33 @@
 package fileio;
 
+import enums.Category;
+import enums.ElvesType;
+import enums.EnumConverter;
+
 import java.util.ArrayList;
 
 public class ChildrenUpdatesInputData {
-    private int id;
-    private Double niceScore;
-    private ArrayList<String> giftPreferences;
+    private final int id;
+    private final Double niceScore;
+    private final ArrayList<Category> giftPreferences;
+    private final ElvesType elf;
 
     public ChildrenUpdatesInputData(final int id, final Double niceScore,
-                                    final ArrayList<String> giftPreferences) {
+                                    final ArrayList<Category> giftPreferences,
+                                    final String elf) {
         this.id = id;
         this.niceScore = niceScore;
         this.giftPreferences = giftPreferences;
+        this.elf = new EnumConverter(elf).toElvesType();
     }
 
     public ChildrenUpdatesInputData(final int id,
-                                    final ArrayList<String> giftPreferences) {
+                                    final ArrayList<Category> giftPreferences,
+                                    final String elf) {
         this.id = id;
         this.niceScore = -1d;
         this.giftPreferences = giftPreferences;
+        this.elf = new EnumConverter(elf).toElvesType();
     }
 
     /**
@@ -30,14 +39,6 @@ public class ChildrenUpdatesInputData {
     }
 
     /**
-     * Set the id the child can be identified by
-     * @param id int - id
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    /**
      * Get the year's nice score
      * @return double - nice score
      */
@@ -46,26 +47,18 @@ public class ChildrenUpdatesInputData {
     }
 
     /**
-     * Set the year's nice score
-     * @param niceScore double - nice score
-     */
-    public void setNiceScore(final Double niceScore) {
-        this.niceScore = niceScore;
-    }
-
-    /**
      * Get a list of new gift preferences to be added to the previous one
      * @return List - gift preferences
      */
-    public ArrayList<String> getGiftPreferences() {
+    public ArrayList<Category> getGiftPreferences() {
         return giftPreferences;
     }
 
     /**
-     * Set a list of new gift preferences to be added to the previous one
-     * @param giftPreferences ArrayList - gift preferences
+     * Get the elf type of the current year
+     * @return ElvesType - elf type
      */
-    public void setGiftPreferences(final ArrayList<String> giftPreferences) {
-        this.giftPreferences = giftPreferences;
+    public ElvesType getElf() {
+        return elf;
     }
 }

@@ -1,6 +1,7 @@
 package santatodo;
 
 import common.Constants;
+import enums.EnumConverter;
 import fileio.AnnualChangesInputData;
 import fileio.ChildrenInputData;
 import fileio.ChildrenUpdatesInputData;
@@ -13,7 +14,6 @@ import children.Child;
 import children.Kid;
 import children.Teen;
 import annualchanges.ChildUpdate;
-import enums.Category;
 import gifts.Gift;
 
 import java.util.ArrayList;
@@ -23,19 +23,6 @@ public class SantaList {
 
     public SantaList(final Input input) {
         this.input = input;
-    }
-
-    private static boolean containsCategory(final String test) {
-
-        System.out.println(test);
-        for (Category category : Category.values()) {
-            System.out.println(category.toString());
-            if (category.toString().equals(test)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -50,16 +37,20 @@ public class SantaList {
 
         if (child.getAge() < Constants.KID) {
             return new Baby(child.getId(), child.getLastName(), child.getFirstName(),
-                    child.getAge(),  child.getCity(), niceScore, child.getGiftsPreferences());
+                    child.getAge(),  child.getCity(), niceScore,
+                    child.getNiceScoreBonus(), child.getElfType(),
+                    child.getGiftsPreferences());
         } else {
             if (child.getAge() < Constants.TEEN) {
                 return new Kid(child.getId(), child.getLastName(),
                         child.getFirstName(), child.getAge(),  child.getCity(), niceScore,
+                        child.getNiceScoreBonus(), child.getElfType(),
                         child.getGiftsPreferences());
             } else {
                 if (child.getAge() <= Constants.YOUNG_ADULT) {
                     return new Teen(child.getId(), child.getLastName(),
                             child.getFirstName(), child.getAge(),  child.getCity(), niceScore,
+                            child.getNiceScoreBonus(), child.getElfType(),
                             child.getGiftsPreferences());
                 } else {
                      // The person is young adult and we don't add him/her to the list
@@ -77,7 +68,8 @@ public class SantaList {
      * @return an instance of the class Gift
      */
     public Gift getGiftInstance(final SantaGiftsInputData gift) {
-        return new Gift(gift.getProductName(), gift.getPrice(), gift.getCategory());
+        return new Gift(gift.getProductName(), gift.getPrice(), gift.getCategory(),
+                gift.getQuantity());
     }
 
     /**
@@ -103,11 +95,12 @@ public class SantaList {
 
         for (ChildrenUpdatesInputData update : change.getChildrenUpdates()) {
             ChildUpdate childUpdate = new ChildUpdate(update.getId(), update.getNiceScore(),
-                    update.getGiftPreferences());
+                    update.getGiftPreferences(), update.getElf());
             childrenUpdates.add(childUpdate);
         }
 
-        return new AnnualChanges(change.getSantaBudget(), newGifts, newChildren, childrenUpdates);
+        return new AnnualChanges(change.getSantaBudget(), newGifts, newChildren, childrenUpdates,
+                change.getCityStrategy());
 
     }
 
@@ -119,6 +112,7 @@ public class SantaList {
     public void add(final Santa santa) {
         santa.setNumberOfYears(input.getNumberOfYears());
         santa.setBudget(input.getSantaBudget());
+        santa.setCityStrategy(new EnumConverter(Constants.ID).toCityStrategyEnum());
 
          // We are adding the children to the list of children based on
          // the category they fit in by checking their age and creating the
