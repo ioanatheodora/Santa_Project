@@ -7,7 +7,7 @@ public class Gift {
     private final String productName;
     private final Double price;
     private final Category category;
-    private final int quantity;
+    private int quantity;
 
     public Gift(final Gift gift) {
         productName = gift.getProductName();
@@ -30,6 +30,14 @@ public class Gift {
      */
     public int getQuantity() {
         return quantity;
+    }
+
+    /**
+     * Set the quantity of the gift
+     * @param quantity int - quantity
+     */
+    public void setQuantity(final int quantity) {
+        this.quantity = quantity;
     }
 
     /**

@@ -36,7 +36,7 @@ public final class Santa implements Visitor {
      * Set the strategy of the current year
      * @param cityStrategy CityStrategyEnum - strategy
      */
-    public void setCityStrategy(CityStrategyEnum cityStrategy) {
+    public void setCityStrategy(final CityStrategyEnum cityStrategy) {
         this.cityStrategy = cityStrategy;
     }
 

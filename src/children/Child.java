@@ -1,5 +1,8 @@
 package children;
 
+import common.Constants;
+import elves.ElfFactory;
+import elves.ElfStrategy;
 import enums.Category;
 import enums.Cities;
 import enums.ElvesType;
@@ -19,11 +22,13 @@ public abstract class Child implements Visitable {
     private ArrayList<Category> giftsPreferences;
     private ArrayList<Gift> receivedGifts = new ArrayList<>();
     private ElvesType elfType;
-
+    private Double budget;
+    private ElfStrategy elfStrategy;
+    private Double niceScoreCity;
 
     public Child(final int id, final String lastName, final String firstName, final int age,
                  final Cities city, final ArrayList<Double> niceScore,
-                 final Double niceScoreBonus, ElvesType elfType,
+                 final Double niceScoreBonus, final ElvesType elfType,
                  final ArrayList<Category> giftsPreferences) {
         this.id = id;
         this.lastName = lastName;
@@ -33,6 +38,7 @@ public abstract class Child implements Visitable {
         this.niceScore = niceScore;
         this.niceScoreBonus = niceScoreBonus;
         this.elfType = elfType;
+        this.elfStrategy = ElfFactory.createElf(elfType);
         this.giftsPreferences = giftsPreferences;
     }
 
@@ -44,6 +50,8 @@ public abstract class Child implements Visitable {
         this.city = child.getCity();
         this.niceScore = child.getNiceScore();
         this.niceScoreBonus = child.getNiceScoreBonus();
+        this.elfType = child.getElfType();
+        this.elfStrategy = ElfFactory.createElf(child.getElfType());
         this.giftsPreferences = child.getGiftsPreferences();
     }
 
@@ -173,7 +181,12 @@ public abstract class Child implements Visitable {
      * @param averageScore Double - average grade
      */
     public void setAverageScore(final Double averageScore) {
-        this.averageScore = averageScore;
+        if (averageScore > Constants.TEN) {
+            this.averageScore  = Constants.TEN;
+        } else {
+            this.averageScore = averageScore;
+        }
+
     }
 
     /**
@@ -190,5 +203,46 @@ public abstract class Child implements Visitable {
      */
     public void setElfType(final ElvesType elfType) {
         this.elfType = elfType;
+        this.elfStrategy = ElfFactory.createElf(elfType);
+    }
+
+    /**
+     * Get the child's assigned budget
+     * @return Double - assigned budget
+     */
+    public Double getBudget() {
+        return budget;
+    }
+
+    /**
+     * Set the child's assigned budget
+     * @param budget Double - assigned budget
+     */
+    public void setBudget(final Double budget) {
+        this.budget = budget;
+    }
+
+    /**
+     * Get the elf strategy assigned to the child in the current year
+     * @return ELfStrategy - elf strategy
+     */
+    public ElfStrategy getElfStrategy() {
+        return elfStrategy;
+    }
+
+    /**
+     * Get the nice score of the city the child is from
+     * @return Double - nice score of the city
+     */
+    public Double getNiceScoreCity() {
+        return niceScoreCity;
+    }
+
+    /**
+     * Set the nice score of the city the child is from
+     * @param niceScoreCity Double - nice score of the city
+     */
+    public void setNiceScoreCity(final Double niceScoreCity) {
+        this.niceScoreCity = niceScoreCity;
     }
 }

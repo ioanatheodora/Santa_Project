@@ -50,6 +50,8 @@ public final class Constants {
     public static final int YOUNG_ADULT = 18;
     public static final int FIRST = 0;
     public static final int TEST = 4;
+    public static final int THIRTY = 30;
+    public static final int ONE_HUNDRED = 100;
 
     private Constants() {
         //constructor for checkstyle

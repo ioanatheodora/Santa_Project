@@ -1,51 +1,27 @@
 package santatodo;
 
 import children.Child;
+import common.Constants;
 import enums.Category;
 import fileio.Output;
 import fileio.OutputAnnualChildren;
 import fileio.Writer;
+import gifts.AssignGift;
 import gifts.Gift;
 import santa.Santa;
+import strategy.Strategy;
+import strategy.StrategyFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ShareGifts {
     private final Santa santa;
 
     public ShareGifts(final Santa santa) {
         this.santa = santa;
-    }
-
-    /**
-     * Finds a gift in Santa's list of gifts that fits into the given budget
-     * and is in the given category. It also chooses the least expensive gift.
-     *
-     * @param category - the category the gift should be
-     * @param budget - the budget the gift must fit into
-     * @return returns an instance of the class Gift if there is a gift
-     * found, or null otherwise
-     */
-    private Gift getCategoryGift(final Category category, final double budget) {
-        Gift givenGift = null;
-        Gift smallest = null;
-        Double smallestPrice = Double.MAX_VALUE;
-
-        for (Gift gift : santa.getGifts()) {
-            if (gift.getCategory() == category && gift.getPrice() < budget
-                && smallestPrice > gift.getPrice()) {
-                smallest = gift;
-                smallestPrice = gift.getPrice();
-            }
-        }
-
-        // if the category is not found the smallest price will stay 0
-        // if found, the smallest price will be the price of the gift
-        if (smallest != null) {
-            givenGift = new Gift(smallest);
-        }
-        return givenGift;
     }
 
     /**
@@ -60,21 +36,42 @@ public class ShareGifts {
 
         // we calculate the average score of the children
         for (Map.Entry<Integer, Child> child : santa.getChildren().entrySet()) {
-            sumAverageScore += child.getValue().accept(santa);
             child.getValue().setAverageScore(child.getValue().accept(santa));
+
+            // added the bonus to the average score
+            child.getValue().setAverageScore(child.getValue().getAverageScore()
+                    + (child.getValue().getNiceScoreBonus() * child.getValue().getAverageScore()
+                            / Constants.ONE_HUNDRED));
+            sumAverageScore += child.getValue().getAverageScore();
         }
 
 
         budgetUnit = santa.getBudget() / sumAverageScore;
+
         for (Map.Entry<Integer, Child> child : santa.getChildren().entrySet()) {
-            ArrayList<Gift> childGifts = new ArrayList<>();
+            // calculate the budget for every child
             Double childBudget = budgetUnit * child.getValue().getAverageScore();
-            Double temporaryBudget = childBudget;
+
+            if (child.getValue().getElfStrategy() != null) {
+                child.getValue().setBudget(child.getValue().getElfStrategy().
+                        getAssignedBudget(childBudget));
+            }
+        }
+
+        Strategy currentStrategy = StrategyFactory.createStrategy(
+                santa.getCityStrategy());
+        LinkedHashMap<Integer, Child> strategyChildren = currentStrategy
+                .getOrderByStrategy(santa.getChildren());
+
+        for (Map.Entry<Integer, Child> child : strategyChildren.entrySet()) {
+            ArrayList<Gift> childGifts = new ArrayList<>();
+            Double temporaryBudget = child.getValue().getBudget();
 
             for (Category category : santa.getChildren().get(child.getKey()).
                     getGiftsPreferences()) {
                 // check whether the category from the child's list is part of Santa's List
-                Gift receivedGift = getCategoryGift(category, temporaryBudget);
+                Gift receivedGift = new AssignGift(santa, category, temporaryBudget).
+                        getCategoryGift();
 
                 //we added the gift to the list of received gifts for the child
                 if (receivedGift != null) {
@@ -82,16 +79,28 @@ public class ShareGifts {
                     childGifts.add(receivedGift);
                 }
             }
+            child.getValue().setReceivedGifts(childGifts);
+        }
+
+        // yellow elf
+        for (Map.Entry<Integer, Child> child : strategyChildren.entrySet()) {
+            child.getValue().getElfStrategy().additionalGifts(santa, child.getValue());
+        }
+
+        TreeMap<Integer, Child> order = null;
+        order = currentStrategy.getOutputOrder(strategyChildren);
+
+
+        for (Map.Entry<Integer, Child> child : order.entrySet()) {
             Child addResult = santa.getChildren().get(child.getKey());
             Output output = new Output(addResult.getId(), addResult.getLastName(),
                     addResult.getFirstName(), addResult.getCity().getValue(),
                     addResult.getAge(), addResult.getGiftsPreferences(),
                     child.getValue().getAverageScore(),
-                    addResult.getNiceScore(), childBudget, childGifts);
+                    addResult.getNiceScore(), child.getValue().getBudget(),
+                    child.getValue().getReceivedGifts());
             outputAnnualChildren.add(output.addResult());
         }
-
-
 
     }
 
